@@ -48,8 +48,9 @@ const createQuery = (parent: any) => {
 		organisations: {
 			resource: `organisationUnits.json`,
 			params: {
-				// filter: `id:in:[${parent.id}]`,
-				level: 5,
+				// filter: `:in:[${parent.id}]`,
+				filter: `level:in:[5,4]`,
+				// level: 5,
 				paging: "false",
 				order: "name:asc",
 				fields: "id,name,path,leaf",
