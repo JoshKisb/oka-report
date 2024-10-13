@@ -3152,7 +3152,7 @@ export const useSqlView = () => {
     const engine = useDataEngine();
     
     const updateQuery = async (date = '', parish = '') => {
-        const query = `\"Enrollment Date\" >= '${date}' AND \"parish\" = '${parish}'`
+        const query = `\\"Enrollment Date\\" >= '${date}' AND \\"parish\\" = '${parish}'`
         const params = {
             "type":"QUERY",
             "lastUpdated":"2024-10-12T14:39:42.728",
@@ -3173,7 +3173,16 @@ export const useSqlView = () => {
             "createdBy":{"id":"dDKHWihXBUP"}
         }
 
-        const response = await fetch('/api/29/sqlViews/DQyX081ap5z?mergeMode=REPLACE', {
+
+        const response1 = await fetch('/ovc/api/29/schemas/sqlView', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(params)
+        });
+
+        const data1 = await response1.json();
+
+        const response = await fetch('/ovc/api/29/sqlViews/DQyX081ap5z?mergeMode=REPLACE', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(params)
@@ -3183,7 +3192,7 @@ export const useSqlView = () => {
     }
 
     const fetchView = async () => {
-        const response = await fetch(`/api/sqlViews/DQyX081ap5z/data.html+css`)
+        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css`)
         const data = await response.text();
         return data;
     }
