@@ -3148,6 +3148,49 @@ export const useTracker = (
     );
 };
 
+export const useSqlView = () => {
+    const engine = useDataEngine();
+    
+    const updateQuery = async (date = '', parish = '') => {
+        const query = `\"Enrollment Date\" >= '${date}' AND \"parish\" = '${parish}'`
+        const params = {
+            "type":"QUERY",
+            "lastUpdated":"2024-10-12T14:39:42.728",
+            "id":"DQyX081ap5z",
+            "sqlQuery":`SELECT *\nFROM get_indicators(1, 1000, '${query}');`,
+            "created":"2024-10-10T23:12:19.015",
+            "attributeValues":[],
+            "sharing":{
+                "owner":"dDKHWihXBUP",
+                "external":false,
+                "users":{},
+                "userGroups":{},
+                "public":"rwrw----"
+            },
+            "name":"Layer Report OVC",
+            "cacheStrategy":"NO_CACHE",
+            "lastUpdatedBy":{"id":"dDKHWihXBUP"},
+            "createdBy":{"id":"dDKHWihXBUP"}
+        }
+
+        const response = await fetch('/api/29/sqlViews/DQyX081ap5z?mergeMode=REPLACE', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(params)
+        });
+
+        const data = await response.json();
+    }
+
+    const fetchView = async () => {
+        const response = await fetch(`/api/sqlViews/DQyX081ap5z/data.html+css`)
+        const data = await response.text();
+        return data;
+    }
+
+    return { updateQuery, fetchView };
+}
+
 export const useLayering = (query: { [key: string]: any }) => {
     return useQuery<any, Error>(
         [Buffer.from(JSON.stringify(query)).toString("base64")],

@@ -88,7 +88,7 @@ const DataSetLayerFilter = () => {
 				return {
 					id: child.id,
 					// pId: parent.id,
-					value: child.id,
+					value: child.name,
 					label: child.name,
 					isLeaf: true, //child.leaf,
 					// level: child.level,

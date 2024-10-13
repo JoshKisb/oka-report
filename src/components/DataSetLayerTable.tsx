@@ -13,12 +13,15 @@ import {
 } from "@chakra-ui/react";
 import { useStore } from "effector-react";
 import { useEffect, useState } from "react";
-import { useLayering } from "../store/Queries";
+import { useLayering, useSqlView } from "../store/Queries";
 import { $store } from "../store/Stores";
 import { innerColumns, otherRows } from "../store/utils";
 
 const DataSetLayerTable = () => {
     const store = useStore($store);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [tableHTML, setTableHTML] = useState("");
+    const { updateQuery, fetchView } = useSqlView();
     const [query, setQuery] = useState<{ [key: string]: any }>({
         query: `select * from layering`,
         fetch_size: 100,
@@ -153,6 +156,15 @@ const DataSetLayerTable = () => {
             };
         });
     }, [store.period, store.selectedOrgUnits, store.code, store.running]);
+    
+
+    const loadTable = async () => {
+        await updateQuery('2024-02-01', 'Bukesa');
+        const table = await fetchView();
+        setTableHTML(table);
+    }
+
+
     return (
         <Stack>
             <Box m="auto" w="100%">
@@ -173,7 +185,20 @@ const DataSetLayerTable = () => {
                             <Spinner />
                         </Stack>
                     )}
-                    {isSuccess && (
+                    {!isLoaded && !isLoading && (
+                        <Button
+                        onClick={() => {
+                            loadTable()
+                        }}
+                    >
+                        See Report
+                    </Button>
+                    )}
+
+
+                    <div dangerouslySetInnerHTML={{ __html: tableHTML }} ></div>    
+
+                    {false && isSuccess && (
                         <Table variant="simple" size="sm">
                             <Thead>
                                 <Tr py={1}>
