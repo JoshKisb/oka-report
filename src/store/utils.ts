@@ -1,3 +1,5 @@
+import dayjs, { Dayjs } from "dayjs";
+
 export function s2ab(s: any) {
   let buf = new ArrayBuffer(s.length);
   let view = new Uint8Array(buf);
@@ -35,6 +37,27 @@ export const findQuarters = (year: number, quarter: number) => {
   }
   return [`${year}Q4`];
 };
+
+export const getQuarterFromDate = (date: Dayjs) => {
+  const month = date.month() + 1; // Months are 0-indexed in `dayjs`
+  const quarter = Math.ceil(month / 3); // Calculate the quarter
+  return quarter;
+}
+
+export const getQuarterDates = (date: Dayjs) => {
+  const year = date.year();
+  const quarter = getQuarterFromDate(date);
+
+  const startMonth = (quarter - 1) * 3 + 1; // Calculate the start month of the quarter
+  const startDate = dayjs(`${year}-${startMonth.toString().padStart(2, '0')}-01`);
+  const endDate = startDate.add(3, 'month').subtract(1, 'day'); // Get the last day of the quarter
+
+  return {
+      start: startDate.format('YYYY-MM-DD'),
+      end: endDate.format('YYYY-MM-DD')
+  };
+}
+
 
 export const innerColumns = (index: number) => {
   if (index === 0) {

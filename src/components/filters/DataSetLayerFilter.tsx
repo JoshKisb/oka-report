@@ -8,6 +8,7 @@ import {
 	DrawerContent,
 	DrawerHeader,
 	DrawerOverlay,
+	HStack,
 	List,
 	ListItem,
 	Modal,
@@ -22,6 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { useDataEngine } from "@dhis2/app-runtime";
 import { DatePicker, Input, TreeSelect, Select } from "antd";
+import dayjs from "dayjs";
 import { useStore } from "effector-react";
 import { saveAs } from "file-saver";
 import { flatten, fromPairs } from "lodash";
@@ -34,12 +36,14 @@ import {
 	changeCode,
 	changePeriod,
 	setSelectedOrgUnits,
+	setTableHTML,
+	setTableLoading,
 	setUserOrgUnits,
 	toggleColumns,
 } from "../../store/Events";
-import { api } from "../../store/Queries";
+import { api, useSqlView } from "../../store/Queries";
 import { $columns, $isChecked, $store } from "../../store/Stores";
-import { s2ab } from "../../store/utils";
+import { getQuarterDates, s2ab } from "../../store/utils";
 import ContainerActions from "../ContainerActions";
 import ReportDownloadButton from "../ReportDownloadButton";
 
@@ -73,9 +77,8 @@ const DataSetLayerFilter = () => {
 	const engine = useDataEngine();
 	const filteredColumns = useStore($columns);
 	const isChecked = useStore($isChecked);
-	const [org, setOrg] = useState<any[]|null>(null);
-
-	
+	const [org, setOrg] = useState<any[] | null>(null);
+	const { updateQuery, fetchView } = useSqlView();
 
 	const loadOrganisationUnitsChildren = async (parent: any) => {
 		try {
@@ -84,30 +87,30 @@ const DataSetLayerFilter = () => {
 			}: any = await engine.query(createQuery(parent));
 			const found = organisationUnits.map((child: any) => {
 				// return unit.children
-					// .map((child: any) => {
+				// .map((child: any) => {
 				return {
 					id: child.id,
 					// pId: parent.id,
-					value: child.name,
+					value: child.id,
 					label: child.name,
 					isLeaf: true, //child.leaf,
 					// level: child.level,
 				};
-			})
-					// .sort((a: any, b: any) => {
-					// 	if (a.title > b.title) {
-					// 		return 1;
-					// 	}
-					// 	if (a.title < b.title) {
-					// 		return -1;
-					// 	}
-					// 	return 0;
-					// });
+			});
+			// .sort((a: any, b: any) => {
+			// 	if (a.title > b.title) {
+			// 		return 1;
+			// 	}
+			// 	if (a.title < b.title) {
+			// 		return -1;
+			// 	}
+			// 	return 0;
+			// });
 			// });
 			const all = flatten(found);
 			const allorgs = [...all];
 			setUserOrgUnits(allorgs);
-			console.log({orgs: found});
+			console.log({ orgs: found });
 			setFetchedOrgs(found);
 		} catch (e) {
 			console.log(e);
@@ -120,21 +123,21 @@ const DataSetLayerFilter = () => {
 
 	const handleOrgUnitChange = (value: any) => {
 		console.log("val", value);
-		
-		setSelectedOrgUnits(value);
+
+		setSelectedOrgUnits([value]);
 		// const selected = value.map((v: any) => {
 		// 	const uorg = allOrganisations.current?.find(o => o.id == v);
 		// 	if (!uorg) return null;
 		// 	return ({id: uorg.id, level: uorg.level});
 		// });
 		setOrg(value);
-	}
+	};
 
 	const download = async () => {
 		let must: any[] = [
 			{
 				term: {
-					["qtr.keyword"]: store.period.format("YYYY[Q]Q"),
+					["qtr.keyword"]: store.period?.format("YYYY[Q]Q"),
 				},
 			},
 			{
@@ -238,135 +241,187 @@ const DataSetLayerFilter = () => {
 		modalOnClose();
 	};
 
+	const loadTable = async (date: string, organisation = 'Bukesa') => {
+		// await updateQuery('2024-02-01', 'Bukesa');
+        // setIsLoading(true)
+		setTableLoading(true)
+		const table = await fetchView('2024-02-01', organisation);
+		setTableLoading(false);
+        setTableHTML(table);
+
+		// console.log("table", table)
+
+	};
+
+	const handleLoadTable = () => {
+		const dates = getQuarterDates(store.period || dayjs())
+
+		const selectedOrg = store.selectedOrgUnits?.[0];
+		const org = store.userOrgUnits.find(org => org.id == selectedOrg);
+		console.log("org", store.selectedOrgUnits, org);
+		loadTable(dates.start, org.label);
+	}
+
+	// useEffect(() => {
+	// 	if (!store.running) return;
+
+    //     if (store.period) {
+
+    //         const dates = getQuarterDates(store.period || dayjs())
+
+    //         console.log("org", store.selectedOrgUnits);
+    //         loadTable(dates.start, store.selectedOrgUnits?.[0]);
+    //     }
+	// }, [store.period, store.selectedOrgUnits, store.code, store.running]);
+
+
 	return (
-		<Stack direction="row" spacing="30px">
-			<Stack direction="row" alignItems="center">
-				<Text>Select Organisation:</Text>
-				<Select
-					allowClear={true}
-					// treeDataSimpleMode
-					showSearch
-					style={{
-						width: "350px",
-					}}
-					// listHeight={700}		
-					optionFilterProp="label"			
-					value={store.selectedOrgUnits}
-					dropdownStyle={{ height: 200, overflow: "scroll" }}
-					placeholder="Please select Organisation Unit(s)"
-					onChange={handleOrgUnitChange}
-					// loadData={loadOrganisationUnitsChildren}
-					options={fetchedOrgs}
+		<Stack direction="column">
+			<Stack
+				direction="row"
+				alignItems="center"
+				justifyContent="space-between"
+			>
+				<Stack direction="row" alignItems="center">
+					<AdminProvider>
+						<ContainerActions />
+					</AdminProvider>
+				</Stack>
+				<Stack direction="row" spacing={4}>
+					<Button
+						leftIcon={<MdFilterList />}
+						colorScheme="blue"
+						size="sm"
+						onClick={onOpen}
+					>
+						Show columns
+					</Button>
+					<ReportDownloadButton code={code} />
+					{/* <Button
+						rightIcon={<MdFileDownload />}
+						colorScheme="blue"
+						variant="outline"
+						size="sm"
+						onClick={() => {
+							// modalOnOpen();
+							// download();
+						}}
+					>
+						Download
+					</Button> */}
+
+					<Modal isOpen={modalIsOpen} onClose={modalOnClose} isCentered>
+						<ModalOverlay />
+						<ModalContent bg="none" boxShadow="none" textColor="white">
+							<ModalBody
+								display="flex"
+								alignItems="center"
+								alignContent="center"
+								justifyItems="center"
+								justifyContent="center"
+								boxShadow="none"
+								flexDirection="column"
+							>
+								<CircularProgress isIndeterminate />
+								<Text>Downloading please wait...</Text>
+							</ModalBody>
+						</ModalContent>
+					</Modal>
+					<Drawer
+						size="sm"
+						isOpen={isOpen}
+						placement="right"
+						onClose={onClose}
+						finalFocusRef={btnRef}
+					>
+						<DrawerOverlay />
+						<DrawerContent>
+							<DrawerCloseButton />
+							<DrawerHeader>
+								<Checkbox
+									isChecked={isChecked}
+									onChange={(e: ChangeEvent<HTMLInputElement>) =>
+										toggleColumns(e.target.checked)
+									}
+								>
+									Choose Columns
+								</Checkbox>
+							</DrawerHeader>
+
+							<DrawerBody>
+								<List spacing={3}>
+									{store.columns.map((c) => (
+										<ListItem key={c.display}>
+											<Checkbox
+												isChecked={c.selected}
+												onChange={(
+													e: ChangeEvent<HTMLInputElement>
+												) =>
+													addRemoveColumn({
+														value: e.target.checked,
+														id: c.id,
+													})
+												}
+											>
+												{c.display}
+											</Checkbox>
+										</ListItem>
+									))}
+								</List>
+							</DrawerBody>
+						</DrawerContent>
+					</Drawer>
+				</Stack>
+			</Stack>
+			<Stack direction="row" spacing="30px">
+				<Stack direction="row" alignItems="center">
+					<Text>Select Organisation:</Text>
+					<Select
+						allowClear={true}
+						// treeDataSimpleMode
+						showSearch
+						style={{
+							width: "350px",
+						}}
+						// listHeight={700}
+						optionFilterProp="label"
+						value={store.selectedOrgUnits}
+						dropdownStyle={{ height: 200, overflow: "scroll" }}
+						placeholder="Please select Organisation Unit(s)"
+						onChange={handleOrgUnitChange}
+						// loadData={loadOrganisationUnitsChildren}
+						options={fetchedOrgs}
 					/>
 					{/* {store.userOrgUnits.map(org => <Select.Option value={org.value} key={org.id}>{org.title}</Select.Option>)} */}
 					{/* </Select> */}
-			</Stack>
-			<Stack direction="row" alignItems="center">
-				<Text>Quarter:</Text>
-				<DatePicker
-					picker="quarter"
-					value={store.period}
-					onChange={(value) => changePeriod(value)}
-				/>
-			</Stack>
-			<Stack direction="row" alignItems="center">
-				<Text>Code:</Text>
-				<Input
-					value={code}
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setCode(e.target.value)
-					}
-				/>
-			</Stack>
-			<Button onClick={() => changeCode(code)}>Search</Button>
-			<Spacer />
-			<AdminProvider>
-				<ContainerActions />
-			</AdminProvider>
+				</Stack>
+				<Stack direction="row" alignItems="center">
+					<Text>Quarter:</Text>
+					<DatePicker
+						picker="quarter"
+						value={store.period}
+						onChange={(value) => changePeriod(value)}
+					/>
+				</Stack>
+				<Stack direction="row" alignItems="center">
+					<Text>Code:</Text>
+					<Input
+						value={code}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							setCode(e.target.value)
+						}
+					/>
+				</Stack>
 
-			<Spacer />
-			<Stack direction="row" spacing={4}>
+				<Button onClick={() => changeCode(code)}>Search</Button>
+				<Spacer />
 				<Button
-					leftIcon={<MdFilterList />}
-					colorScheme="blue"
-					size="sm"
-					onClick={onOpen}
-				>
-					Show columns
-				</Button>
-				<ReportDownloadButton code={code} />
-				{/* <Button
-					rightIcon={<MdFileDownload />}
-					colorScheme="blue"
-					variant="outline"
-					size="sm"
 					onClick={() => {
-						// modalOnOpen();
-						// download();
+						handleLoadTable();
 					}}
 				>
-					Download
-				</Button> */}
-
-				<Modal isOpen={modalIsOpen} onClose={modalOnClose} isCentered>
-					<ModalOverlay />
-					<ModalContent bg="none" boxShadow="none" textColor="white">
-						<ModalBody
-							display="flex"
-							alignItems="center"
-							alignContent="center"
-							justifyItems="center"
-							justifyContent="center"
-							boxShadow="none"
-							flexDirection="column"
-						>
-							<CircularProgress isIndeterminate />
-							<Text>Downloading please wait...</Text>
-						</ModalBody>
-					</ModalContent>
-				</Modal>
-				<Drawer
-					size="sm"
-					isOpen={isOpen}
-					placement="right"
-					onClose={onClose}
-					finalFocusRef={btnRef}
-				>
-					<DrawerOverlay />
-					<DrawerContent>
-						<DrawerCloseButton />
-						<DrawerHeader>
-							<Checkbox
-								isChecked={isChecked}
-								onChange={(e: ChangeEvent<HTMLInputElement>) =>
-									toggleColumns(e.target.checked)
-								}
-							>
-								Choose Columns
-							</Checkbox>
-						</DrawerHeader>
-
-						<DrawerBody>
-							<List spacing={3}>
-								{store.columns.map((c) => (
-									<ListItem key={c.display}>
-										<Checkbox
-											isChecked={c.selected}
-											onChange={(e: ChangeEvent<HTMLInputElement>) =>
-												addRemoveColumn({
-													value: e.target.checked,
-													id: c.id,
-												})
-											}
-										>
-											{c.display}
-										</Checkbox>
-									</ListItem>
-								))}
-							</List>
-						</DrawerBody>
-					</DrawerContent>
-				</Drawer>
+					See Report
+				</Button>
 			</Stack>
 		</Stack>
 	);

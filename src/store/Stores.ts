@@ -28,6 +28,8 @@ import {
     toggleColumns3,
     toggleColumns4,
     setRunning,
+    setTableHTML,
+    setTableLoading,
 } from "./Events";
 import { calculateQuarter } from "./utils";
 
@@ -53,6 +55,8 @@ export const $store = domain
         currentProgram: "",
         currentStage: "",
         programs: [],
+        tableHTML: "",
+        tableLoading: false,
     })
     .on(setUserOrgUnits, (state, userOrgUnits) => {
         return { ...state, userOrgUnits };
@@ -68,6 +72,12 @@ export const $store = domain
     })
     .on(setProgram, (state, program) => {
         return { ...state, program };
+    })
+    .on(setTableHTML, (state, tableHTML) => {
+        return { ...state, tableHTML };
+    })
+    .on(setTableLoading, (state, tableLoading) => {
+        return { ...state, tableLoading };
     })
     .on(changeTotal, (state, total) => {
         return { ...state, total };

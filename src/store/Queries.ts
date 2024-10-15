@@ -3152,12 +3152,12 @@ export const useSqlView = () => {
     const engine = useDataEngine();
     
     const updateQuery = async (date = '', parish = '') => {
-        const query = `\\"Enrollment Date\\" >= '${date}' AND \\"parish\\" = '${parish}'`
+        const query = `"Enrollment Date" >= "${date}" AND "parish" = "${parish}"`
         const params = {
             "type":"QUERY",
             "lastUpdated":"2024-10-12T14:39:42.728",
             "id":"DQyX081ap5z",
-            "sqlQuery":`SELECT *\nFROM get_indicators(1, 1000, '${query}');`,
+            "sqlQuery": `SELECT * FROM get_indicators(1, 1000, '${query}');`,
             "created":"2024-10-10T23:12:19.015",
             "attributeValues":[],
             "sharing":{
@@ -3191,8 +3191,8 @@ export const useSqlView = () => {
         const data = await response.json();
     }
 
-    const fetchView = async () => {
-        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css`)
+    const fetchView = async (date = '', parish = '') => {
+        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css?var=date:${date}&var=parish:${parish}`)
         const data = await response.text();
         return data;
     }

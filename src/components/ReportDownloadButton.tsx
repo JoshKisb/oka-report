@@ -60,14 +60,17 @@ const ReportDownloadButton: React.FC<ReportDownloadButtonProps> = ({ code }) => 
   const store = useStore($store);
 
   const handleDownloadReport = async () => {
-    const orgunit = store.selectedOrgUnits;
+    // const orgunit = store.selectedOrgUnits;
+    const selectedOrg = store.selectedOrgUnits?.[0];
+		const org = store.userOrgUnits.find(org => org.id == selectedOrg);
+    console.log("org", store.selectedOrgUnits, org);
     // const code = store.code;
     const period = store.period;
     setIsLoading(true);
     setError(null);
     try {
 
-      const response = await serverapi.get(`/download-report${buildOrgQueryString(orgunit, code, period)}`, { responseType: 'blob' });
+      const response = await serverapi.get(`/download-report${buildOrgQueryString([org?.label], code, period)}`, { responseType: 'blob' });
       // const response = await serverapi.get(`/download-report?level={}&org={}`, { responseType: 'blob' });
 
       // Create a URL for the downloaded file

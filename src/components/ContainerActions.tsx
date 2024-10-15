@@ -72,7 +72,6 @@ const ContainerActions = () => {
 			{!isRunning ? (
 				<Button
 					colorScheme="blue"
-					paddingX={8}
 					size="sm"
 					onClick={handleRunReport}
 					isLoading={isLoadingRunReport}
@@ -82,7 +81,6 @@ const ContainerActions = () => {
 			) : (
 				<Button
 					colorScheme="red"
-					paddingX={8}
 					size="sm"
 					onClick={handleStopReport}
 					isLoading={isLoadingStopReport}
@@ -92,7 +90,6 @@ const ContainerActions = () => {
 			)}
 			<Button
 				colorScheme="blue"
-				paddingX={8}
 				size="sm"
 				onClick={handleStartUpdate}
 				isLoading={isLoadingStartUpdate}

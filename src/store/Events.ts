@@ -27,3 +27,5 @@ export const setPrograms = domain.createEvent<any[]>();
 export const setCurrentStage = domain.createEvent<string>();
 export const setColumn4 = domain.createEvent<Column[]>();
 export const setRunning = domain.createEvent<boolean>();
+export const setTableHTML = domain.createEvent<string>();
+export const setTableLoading = domain.createEvent<boolean>();

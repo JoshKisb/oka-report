@@ -28,6 +28,8 @@ export interface Store {
     currentProgram: string;
     currentStage: string;
     programs: any[];
+    tableHTML: string;
+    tableLoading: boolean;
 }
 
 export interface ColumnProps {
