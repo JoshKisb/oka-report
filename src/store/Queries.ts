@@ -3192,8 +3192,7 @@ export const useSqlView = () => {
     }
 
     const fetchView = async (start = '', end = '', parish = '', level = 'parish') => {
-        const viewId = level == "parish" ? "DQyX081ap5z" : "r5Z503wB8de"
-        const response = await fetch(`/ovc/api/sqlViews/${viewId}/data.html+css?var=start:${start}&var=end:${end}&var=parish:${parish}`)
+        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css?var=start:${start}&var=end:${end}&var=parish:${parish}&var=level:${level}`)
         const data = await response.text();
         return data;
     }
