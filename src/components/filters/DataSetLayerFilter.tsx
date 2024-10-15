@@ -244,8 +244,9 @@ const DataSetLayerFilter = () => {
 	const loadTable = async (date: string, organisation = 'Bukesa') => {
 		// await updateQuery('2024-02-01', 'Bukesa');
         // setIsLoading(true)
+
 		setTableLoading(true)
-		const table = await fetchView('2024-02-01', organisation);
+		const table = await fetchView(date, organisation);
 		setTableLoading(false);
         setTableHTML(table);
 
@@ -258,7 +259,7 @@ const DataSetLayerFilter = () => {
 
 		const selectedOrg = store.selectedOrgUnits?.[0];
 		const org = store.userOrgUnits.find(org => org.id == selectedOrg);
-		console.log("org", store.selectedOrgUnits, org);
+		console.log("org", store.selectedOrgUnits, org, dates);
 		loadTable(dates.start, org.label);
 	}
 

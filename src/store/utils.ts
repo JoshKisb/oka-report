@@ -44,17 +44,16 @@ export const getQuarterFromDate = (date: Dayjs) => {
   return quarter;
 }
 
+
 export const getQuarterDates = (date: Dayjs) => {
   const year = date.year();
   const quarter = getQuarterFromDate(date);
 
-  const startMonth = (quarter - 1) * 3 + 1; // Calculate the start month of the quarter
-  const startDate = dayjs(`${year}-${startMonth.toString().padStart(2, '0')}-01`);
-  const endDate = startDate.add(3, 'month').subtract(1, 'day'); // Get the last day of the quarter
+  const [startDate, endDate] = calculateQuarter(year, quarter);
 
   return {
-      start: startDate.format('YYYY-MM-DD'),
-      end: endDate.format('YYYY-MM-DD')
+    start: dayjs(startDate).format('YYYY-MM-DD'),
+    end: dayjs(endDate).format('YYYY-MM-DD')
   };
 }
 
