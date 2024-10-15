@@ -246,7 +246,8 @@ const DataSetLayerFilter = () => {
         // setIsLoading(true)
 
 		setTableLoading(true)
-		const table = await fetchView(start_date, end_date, organisation);
+		const level = /division\s*$/i.test(organisation) ? "subcounty/division" : "parish";
+		const table = await fetchView(start_date, end_date, organisation, level);
 		setTableLoading(false);
         setTableHTML(table);
 
