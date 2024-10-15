@@ -3191,8 +3191,8 @@ export const useSqlView = () => {
         const data = await response.json();
     }
 
-    const fetchView = async (date = '', parish = '') => {
-        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css?var=date:${date}&var=parish:${parish}`)
+    const fetchView = async (start = '', end = '', parish = '') => {
+        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css?var=start:${start}&var=end:${end}&var=parish:${parish}`)
         const data = await response.text();
         return data;
     }

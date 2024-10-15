@@ -6,24 +6,33 @@ export function s2ab(s: any) {
   for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
   return buf;
 }
+
 export const calculateQuarter = (
   year: number,
   quarter: number
 ): [Date, Date] => {
   if (quarter === 1) {
-    return [new Date(`${year - 1}-10-01`), new Date(`${year}-03-31`)];
+    // Q1: October 1 of the previous year to December 31 of the previous year
+    return [new Date(`${year - 1}-10-01`), new Date(`${year - 1}-12-31`)];
   }
   if (quarter === 2) {
-    return [new Date(`${year - 1}-10-01`), new Date(`${year}-06-30`)];
+    // Q2: January 1 to March 31 of the current year
+    return [new Date(`${year}-01-01`), new Date(`${year}-03-31`)];
   }
   if (quarter === 3) {
-    return [new Date(`${year - 1}-10-01`), new Date(`${year}-09-30`)];
+    // Q3: April 1 to June 30 of the current year
+    return [new Date(`${year}-04-01`), new Date(`${year}-06-30`)];
   }
   if (quarter === 4) {
-    return [new Date(`${year}-10-01`), new Date(`${year}-12-31`)];
+    // Q4: July 1 to September 30 of the current year
+    return [new Date(`${year}-07-01`), new Date(`${year}-09-30`)];
   }
+  // Default case if quarter is invalid
   return [new Date(`${year}-10-01`), new Date(`${year}-12-31`)];
 };
+
+
+
 
 export const findQuarters = (year: number, quarter: number) => {
   if (quarter === 1) {
