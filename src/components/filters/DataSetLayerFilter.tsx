@@ -53,11 +53,11 @@ const createQuery = (parent: any) => {
 			resource: `organisationUnits.json`,
 			params: {
 				// filter: `:in:[${parent.id}]`,
-				filter: `level:in:[5,4]`,
-				// level: 5,
+				// filter: `level:in:[5,4]`,
+				level: 4,
 				paging: "false",
 				order: "name:asc",
-				fields: "id,name,path,leaf",
+				fields: "id,name,path,leaf,children[id,name]",
 			},
 		},
 	};
@@ -85,16 +85,24 @@ const DataSetLayerFilter = () => {
 			const {
 				organisations: { organisationUnits },
 			}: any = await engine.query(createQuery(parent));
-			const found = organisationUnits.map((child: any) => {
+			const found = organisationUnits.map((unit: any) => {
 				// return unit.children
-				// .map((child: any) => {
+				// 
 				return {
-					id: child.id,
+					id: unit.id,
 					// pId: parent.id,
-					value: child.id,
-					label: child.name,
-					isLeaf: true, //child.leaf,
-					// level: child.level,
+					value: unit.id,
+					label: unit.name,
+					isLeaf: unit.leaf,
+					level: 4,
+					children: unit.children.map((child: any) => ({
+						id: child.id,
+						// pId: parent.id,
+						value: child.id,
+						label: child.name,
+						isLeaf: true,
+						level: 5,
+					})),
 				};
 			});
 			// .sort((a: any, b: any) => {
@@ -107,9 +115,9 @@ const DataSetLayerFilter = () => {
 			// 	return 0;
 			// });
 			// });
-			const all = flatten(found);
-			const allorgs = [...all];
-			setUserOrgUnits(allorgs);
+			const all = flatten(found.map((org: any) => [org, ...org.children]));
+			// const allorgs = [...all];
+			setUserOrgUnits(all);
 			console.log({ orgs: found });
 			setFetchedOrgs(found);
 		} catch (e) {
@@ -241,12 +249,12 @@ const DataSetLayerFilter = () => {
 		modalOnClose();
 	};
 
-	const loadTable = async (start_date: string, end_date: string, organisation = 'Bukesa') => {
+	const loadTable = async (start_date: string, end_date: string, organisation = 'Bukesa', orglevel = 5) => {
 		// await updateQuery('2024-02-01', 'Bukesa');
         // setIsLoading(true)
 
 		setTableLoading(true)
-		const level = /division\s*$/i.test(organisation) ? "division" : "parish";
+		const level = orglevel == 4 ? "division" : "parish";
 		const table = await fetchView(start_date, end_date, organisation, level);
 		setTableLoading(false);
         setTableHTML(table);
@@ -261,7 +269,7 @@ const DataSetLayerFilter = () => {
 		const selectedOrg = store.selectedOrgUnits?.[0];
 		const org = store.userOrgUnits.find(org => org.id == selectedOrg);
 		console.log("org", store.selectedOrgUnits, org, dates);
-		loadTable(dates.start, dates.end, org.label);
+		loadTable(dates.start, dates.end, org.label, org.level);
 	}
 
 	// useEffect(() => {
@@ -378,7 +386,7 @@ const DataSetLayerFilter = () => {
 			<Stack direction="row" spacing="30px">
 				<Stack direction="row" alignItems="center">
 					<Text>Select Organisation:</Text>
-					<Select
+					<TreeSelect
 						allowClear={true}
 						// treeDataSimpleMode
 						showSearch
@@ -386,16 +394,17 @@ const DataSetLayerFilter = () => {
 							width: "350px",
 						}}
 						// listHeight={700}
-						optionFilterProp="label"
+						// optionFilterProp="label"
+						treeNodeFilterProp="label"
 						value={store.selectedOrgUnits}
 						dropdownStyle={{ height: 200, overflow: "scroll" }}
 						placeholder="Please select Organisation Unit(s)"
 						onChange={handleOrgUnitChange}
 						// loadData={loadOrganisationUnitsChildren}
-						options={fetchedOrgs}
+						treeData={fetchedOrgs}
 					/>
-					{/* {store.userOrgUnits.map(org => <Select.Option value={org.value} key={org.id}>{org.title}</Select.Option>)} */}
-					{/* </Select> */}
+					{/* {fetchedOrgs.map(org => <Select.Option value={org.value} key={org.id}>{org.title}</Select.Option>)} */}
+					{/* </TreeSelect> */}
 				</Stack>
 				<Stack direction="row" alignItems="center">
 					<Text>Quarter:</Text>
