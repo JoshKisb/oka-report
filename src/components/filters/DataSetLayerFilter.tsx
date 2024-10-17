@@ -26,7 +26,7 @@ import { DatePicker, Input, TreeSelect, Select } from "antd";
 import dayjs from "dayjs";
 import { useStore } from "effector-react";
 import { saveAs } from "file-saver";
-import { flatten, fromPairs } from "lodash";
+import { flatten, flattenDeep, fromPairs } from "lodash";
 import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { MdFileDownload, MdFilterList } from "react-icons/md";
 import XLSX from "xlsx";
@@ -54,15 +54,56 @@ const createQuery = (parent: any) => {
 			params: {
 				// filter: `:in:[${parent.id}]`,
 				// filter: `level:in:[5,4]`,
-				level: 4,
+				// level: 1,
+				maxLevel: 5,
 				paging: "false",
 				order: "name:asc",
-				fields: "id,name,path,leaf,children[id,name]",
+				fields: "id,name,leaf,level,parent[id]",
 			},
 		},
 	};
 };
 
+const processOrgUnits = (units: any[], level = 1): any[] => {
+	return units.map((unit: any) => ({
+	  id: unit.id,
+	  value: unit.id,
+	  label: unit.name,
+	  isLeaf: unit.leaf,
+	  level: unit.level,
+	  children: unit.children ? processOrgUnits(unit.children, level + 1) : [] 
+	}));
+  };
+
+  const buildTreeOptimized = (units: any[]) => {
+	const unitMap = new Map(); 
+  
+	// Build the map and initialize children arrays
+	units.forEach(unit => {
+	  unitMap.set(unit.id, { ...unit, children: [] });
+	});
+  
+	let rootUnits: any[] = [];
+  
+	// Link units to their parents as we build the tree
+	units.forEach(unit => {
+	  if (unit.parent && unitMap.has(unit.parent.id)) {
+		// Add to parent's children
+		unitMap.get(unit.parent.id).children.push(unitMap.get(unit.id));
+	  } else {
+		// Root level unit
+		rootUnits.push(unitMap.get(unit.id));
+	  }
+	});
+  
+	return rootUnits;
+  };
+  
+
+  
+
+
+  
 const DataSetLayerFilter = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [code, setCode] = useState<string>("");
@@ -79,32 +120,38 @@ const DataSetLayerFilter = () => {
 	const isChecked = useStore($isChecked);
 	const [org, setOrg] = useState<any[] | null>(null);
 	const { updateQuery, fetchView } = useSqlView();
+	const targetLevel = 3;
+
+	
+	const getOrgUnitsAtTargetLevel = (unit: any, currentLevel: number) => {
+		// If the current level is less than the target level, look for children
+		if (currentLevel < targetLevel) {
+		  const children = store.userOrgUnits.filter(child => child.parent?.id === unit.id); // Get immediate children
+		  
+		  // Recursively check the next level to find children of children
+		  let result: any = [];
+		  children.forEach(child => {
+			// If the child is at the target level, add it to the result
+			if (child.level === targetLevel) {
+			  result.push(child); // Add the child at the target level
+			} else {
+			  // Continue to search for children at the next level
+			  result = result.concat(getOrgUnitsAtTargetLevel(child, currentLevel + 1));
+			}
+		  });
+	
+		  return result; 
+		} else {
+		  return [unit];
+		}
+	  };
 
 	const loadOrganisationUnitsChildren = async (parent: any) => {
 		try {
 			const {
 				organisations: { organisationUnits },
 			}: any = await engine.query(createQuery(parent));
-			const found = organisationUnits.map((unit: any) => {
-				// return unit.children
-				// 
-				return {
-					id: unit.id,
-					// pId: parent.id,
-					value: unit.id,
-					label: unit.name,
-					isLeaf: unit.leaf,
-					level: 4,
-					children: unit.children.map((child: any) => ({
-						id: child.id,
-						// pId: parent.id,
-						value: child.id,
-						label: child.name,
-						isLeaf: true,
-						level: 5,
-					})),
-				};
-			});
+			const found = processOrgUnits(buildTreeOptimized(organisationUnits));
 			// .sort((a: any, b: any) => {
 			// 	if (a.title > b.title) {
 			// 		return 1;
@@ -115,9 +162,9 @@ const DataSetLayerFilter = () => {
 			// 	return 0;
 			// });
 			// });
-			const all = flatten(found.map((org: any) => [org, ...org.children]));
+			// const all = flattenDeep(found.map((org: any) => [org, ...org.children]));
 			// const allorgs = [...all];
-			setUserOrgUnits(all);
+			setUserOrgUnits(organisationUnits);
 			console.log({ orgs: found });
 			setFetchedOrgs(found);
 		} catch (e) {
@@ -250,11 +297,11 @@ const DataSetLayerFilter = () => {
 	};
 
 	const loadTable = async (start_date: string, end_date: string, organisation = 'Bukesa', orglevel = 5) => {
-		// await updateQuery('2024-02-01', 'Bukesa');
-        // setIsLoading(true)
-
+		// setIsLoading(true)
+		
 		setTableLoading(true)
-		const level = orglevel == 4 ? "division" : "parish";
+		const level = orglevel == 5 ? "parish" : orglevel == 4 ? "subcounty/division" : "district";
+		await updateQuery(start_date, end_date, organisation, level);
 		const table = await fetchView(start_date, end_date, organisation, level);
 		setTableLoading(false);
         setTableHTML(table);
@@ -269,7 +316,11 @@ const DataSetLayerFilter = () => {
 		const selectedOrg = store.selectedOrgUnits?.[0];
 		const org = store.userOrgUnits.find(org => org.id == selectedOrg);
 		console.log("org", store.selectedOrgUnits, org, dates);
-		loadTable(dates.start, dates.end, org.label, org.level);
+		
+		const orgUnits = getOrgUnitsAtTargetLevel(org, org.level);
+    console.log("Organization Units at Target Level:", orgUnits);
+	const orgNames = orgUnits.map((unit: any) => `''${unit.name}''`).join(', ')
+		loadTable(dates.start, dates.end, orgNames, org.level);
 	}
 
 	// useEffect(() => {

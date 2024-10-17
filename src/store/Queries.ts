@@ -3151,13 +3151,23 @@ export const useTracker = (
 export const useSqlView = () => {
     const engine = useDataEngine();
     
-    const updateQuery = async (date = '', parish = '') => {
-        const query = `"Enrollment Date" >= "${date}" AND "parish" = "${parish}"`
+    const updateQuery = async (start = '', end = '', parish = '', level = 'parish') => {
+        const queryparams = ` "${level}" IN (${parish})`
+        const query = `
+        SELECT 
+            *, 
+            CASE 
+                WHEN "Enrollment Date" BETWEEN '2024-06-01' AND '2024-12-31' 
+                THEN 'Newly Enrolled' 
+                ELSE 'Not Newly Enrolled in selectedQuarter' 
+            END AS "Newly enrolled" 
+        FROM get_indicators(1, 1000, '${queryparams}');
+        `;
         const params = {
             "type":"QUERY",
             "lastUpdated":"2024-10-12T14:39:42.728",
             "id":"DQyX081ap5z",
-            "sqlQuery": `SELECT * FROM get_indicators(1, 1000, '${query}');`,
+            "sqlQuery": query,
             "created":"2024-10-10T23:12:19.015",
             "attributeValues":[],
             "sharing":{
@@ -3192,7 +3202,7 @@ export const useSqlView = () => {
     }
 
     const fetchView = async (start = '', end = '', parish = '', level = 'parish') => {
-        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css?var=start:${start}&var=end:${end}&var=parish:${parish}&var=level:${level}`)
+        const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.html+css`)
         const data = await response.text();
         return data;
     }
