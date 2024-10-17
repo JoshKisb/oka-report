@@ -3152,7 +3152,7 @@ export const useSqlView = () => {
     const engine = useDataEngine();
     
     const updateQuery = async (start = '', end = '', parish = '', level = 'parish') => {
-        const queryparams = ` "${level}" IN (${parish})`
+        const queryparams = `"Enrollment Date" BETWEEN ''2024-01-01'' AND ''2024-12-31'' AND "${level}" IN (${parish})`
         const query = `
         SELECT 
             *, 
@@ -3161,7 +3161,7 @@ export const useSqlView = () => {
                 THEN 'Newly Enrolled' 
                 ELSE 'Not Newly Enrolled in selectedQuarter' 
             END AS "Newly enrolled" 
-        FROM get_indicators(1, 1000, '${queryparams}');
+        FROM get_indicators(1, 1000, ' ${queryparams} ');
         `;
         const params = {
             "type":"QUERY",
