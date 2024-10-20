@@ -3151,17 +3151,20 @@ export const useTracker = (
 export const useSqlView = () => {
     const engine = useDataEngine();
     
-    const updateQuery = async (start = '', end = '', parish = '', level = 'parish') => {
-        const queryparams = `"Enrollment Date" BETWEEN ''2024-01-01'' AND ''2024-12-31'' AND "${level}" IN (${parish})`
+    const updateQuery = async (start = '', end = '', parish = '', level = 'parish', beneficiary = '') => {
+        let queryparams = `"Enrollment Date" BETWEEN '2024-01-01' AND '2024-12-31' AND "${level}" IN (${parish}) `
+        if (!!beneficiary) queryparams += `AND "Beneficiary ID" IN ('${beneficiary}') `;
+
         const query = `
         SELECT 
-            *, 
+            x.*, 
             CASE 
                 WHEN "Enrollment Date" BETWEEN '2024-06-01' AND '2024-12-31' 
                 THEN 'Newly Enrolled' 
                 ELSE 'Not Newly Enrolled in selectedQuarter' 
             END AS "Newly enrolled" 
-        FROM get_indicators(1, 1000, ' ${queryparams} ');
+        FROM public.program_instance_base_table x
+        WHERE ${queryparams} ;
         `;
         const params = {
             "type":"QUERY",
