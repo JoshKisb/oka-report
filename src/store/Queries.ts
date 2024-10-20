@@ -3153,18 +3153,22 @@ export const useSqlView = () => {
     
     const updateQuery = async (start = '', end = '', parish = '', level = 'parish', beneficiary = '') => {
         let queryparams = `"Enrollment Date" BETWEEN '2024-01-01' AND '2024-12-31' AND "${level}" IN (${parish}) `
-        if (!!beneficiary) queryparams += `AND "Beneficiary ID" IN ('${beneficiary}') `;
+        let fromWhereClause = `get_indicators(1, 1000, ' ${queryparams.replace(/'/g, "''")} ')`
+
+        if (!!beneficiary) {
+            queryparams += `AND "Beneficiary ID" IN ('${beneficiary}') `;
+            fromWhereClause = `public.program_instance_base_table WHERE ${queryparams}`
+        }
 
         const query = `
         SELECT 
-            x.*, 
+            *, 
             CASE 
                 WHEN "Enrollment Date" BETWEEN '2024-06-01' AND '2024-12-31' 
                 THEN 'Newly Enrolled' 
                 ELSE 'Not Newly Enrolled in selectedQuarter' 
             END AS "Newly enrolled" 
-        FROM public.program_instance_base_table x
-        WHERE ${queryparams} ;
+        FROM ${fromWhereClause} ;
         `;
         const params = {
             "type":"QUERY",
