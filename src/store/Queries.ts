@@ -3152,14 +3152,15 @@ export const useSqlView = () => {
     const engine = useDataEngine();
     
     const updateQuery = async (start = '', end = '', parish = '', level = 'parish', beneficiary = '') => {
-        let queryparams = `"Enrollment Date" BETWEEN '2024-01-01' AND '2024-12-31' AND "${level}" IN (${parish}) `
+        let queryparams = `"'2024-01-01' AND '2024-12-31'`
+        let queryparams2 = `"${level}" IN (${parish})`;
         
         if (!!beneficiary) {
-            queryparams += `AND "Beneficiary ID" IN ('${beneficiary}') `;
+            queryparams2 += ` AND "Beneficiary ID" IN ('${beneficiary}') `;
             // fromWhereClause = `public.program_instance_base_table WHERE ${queryparams}`
         }
         
-        const query = `SELECT * FROM get_indicators(0, 1000, ' ${queryparams.replace(/'/g, "''")} ') ;`;
+        const query = `SELECT * FROM get_indicators(0, 1000, '${queryparams.replace(/'/g, "''")}', '${queryparams2.replace(/'/g, "''")}') ;`;
         const params = {
             "type":"QUERY",
             "lastUpdated":"2024-10-12T14:39:42.728",
