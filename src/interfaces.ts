@@ -5,6 +5,7 @@ export interface Column {
     id: string;
     selected: boolean;
     bg?: string;
+    row?: string;
     type?: string;
 }
 export interface Store {

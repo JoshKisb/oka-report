@@ -3151,7 +3151,7 @@ export const useTracker = (
 export const useSqlView = () => {
     const engine = useDataEngine();
     
-    const updateQuery = async (start = '', end = '', parish = '', level = 'parish', beneficiary = '') => {
+    const updateQuery = async (start = '', end = '', parish = '', level = 'parish', beneficiary = '', columns: Column[] = []) => {
         let queryparams = `"'${start}' AND '${end}'`
         let queryparams2 = `"${level}" IN (${parish})`;
         
@@ -3159,8 +3159,11 @@ export const useSqlView = () => {
             queryparams2 += ` AND "Beneficiary ID" IN ('${beneficiary}') `;
             // fromWhereClause = `public.program_instance_base_table WHERE ${queryparams}`
         }
+
+        const cols = columns.filter(c => !!c.row).map(c => `"${c.row}"`).join(', ');
+        console.log("cols", {cols, columns});
         
-        const query = `SELECT * FROM get_indicators(0, 1000, '${queryparams.replace(/'/g, "''")}', '${queryparams2.replace(/'/g, "''")}') ;`;
+        const query = `SELECT ${cols} FROM get_indicators(0, 1000, '${queryparams.replace(/'/g, "''")}', '${queryparams2.replace(/'/g, "''")}') ;`;
         const params = {
             "type":"QUERY",
             "lastUpdated":"2024-10-12T14:39:42.728",

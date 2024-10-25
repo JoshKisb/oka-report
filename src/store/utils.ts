@@ -82,8 +82,8 @@ export const getQuarterDates = (date: Dayjs) => {
   const year = date.year();
   const quarter = getQuarterFromDate(date);
 
-  const [startDate, endDate] = calculateStandardQuarter(year, quarter);
-  // const [startDate, endDate] = calculateQuarter(year, quarter);
+  // const [startDate, endDate] = calculateStandardQuarter(year, quarter);
+  const [startDate, endDate] = calculateQuarter(year, quarter);
 
   return {
     start: dayjs(startDate).format('YYYY-MM-DD'),

@@ -302,7 +302,7 @@ const DataSetLayerFilter = () => {
 		
 		setTableLoading(true)
 		const level = orglevel == 5 ? "parish" : orglevel == 4 ? "subcounty/division" : "district";
-		await updateQuery(start_date, end_date, organisation, level, beneficiary);
+		await updateQuery(start_date, end_date, organisation, level, beneficiary, filteredColumns);
 		const table = await fetchView(start_date, end_date, organisation, level);
 		setTableLoading(false);
         setTableHTML(table);

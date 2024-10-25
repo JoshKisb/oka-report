@@ -23,445 +23,514 @@ const from10To17 = [
     { label: "10 - 14 Years", id: "10 - 14" },
     { label: "15 - 17 Years", id: "15 - 17" },
 ];
+
 export const columns: Column[] = [
-    { display: "Instance", id: "id", selected: true },
-    { display: "Beneficiary ID", id: "HLKc2AKR9jW", selected: true },
+    { display: "Instance", id: "id", selected: true, row: "instance"  },
+    { display: "Beneficiary ID", id: "HLKc2AKR9jW", selected: true, row: "Beneficiary ID" },
     // {
     //   display: "Old Beneficiary ID",
     //   id: "e0zEpTw7IH6",
     //   selected: true,
     // },
-    { display: "Household Code", id: "tHCT4RKXoiU", selected: true },
+    { display: "Household Code", id: "tHCT4RKXoiU", selected: true, row: "Household Code" },
     {
         display: "Enrollment Date",
         id: "enrollmentDate",
         selected: true,
+        row: "Enrollment Date"
     },
-
     {
-        display: "Type(Comprehensive, Prevention)",
-        id: "type",
+        display: "Event Date",
+        id: "event_date",
         selected: true,
+        row: "event_date"
     },
-    { display: "District", id: "district", selected: true },
-    { display: "Sub-county", id: "subCounty", selected: true },
-    { display: "Parish", id: "orgUnitName", selected: true },
-    { display: "Village", id: "Xkwy5P2JG24", selected: true },
-    { display: "Household Head", id: "ExnzeYjgIaT", selected: true },
+    { display: "District", id: "district", selected: true, row: "district" },
+    { display: "Sub-county", id: "subCounty", selected: true, row: "subcounty/division" },
+    { display: "Parish", id: "orgUnitName", selected: true, row: "parish" },
+    { display: "Household Head", id: "ExnzeYjgIaT", selected: true, row: "Household Head" },
+    // { display: "Village", id: "Xkwy5P2JG24", selected: true },
     {
         display: "Primary Caregiver",
         id: "primaryCareGiver",
         selected: true,
+        row: "Primary Caregiver"
     },
     {
         display: "Date of Assessment",
         id: "eventDate",
         selected: true,
+        row: "Date of Assessment"
     },
     {
         display: "Beneficiary Name",
         id: "huFucxA3e5c",
         selected: true,
+        row: "Beneficiary Name"
     },
-    { display: "DOB", id: "N1nMqKtYKvI", selected: true },
-    { display: "Age", id: "age", selected: true },
-    { display: "Age Group", id: "ageGroup", selected: true },
-    { display: "Sex", id: "CfpoFtRmK1z", selected: true },
+    { display: "DOB", id: "N1nMqKtYKvI", selected: true, row: "DOB" },
+    { display: "Age", id: "age", selected: true, row: "age" },
+    { display: "Age Group", id: "ageGroup", selected: true, row: "Age Group" },
+    { display: "Sex", id: "CfpoFtRmK1z", selected: true, row: "Sex" },
     {
         display: "Current Weight",
         id: "weight",
         selected: true,
+        row: "Current Weight"
     },
     {
         display: "Risk Factor",
         id: "riskFactor",
         selected: true,
+        row: "Risk Factor"
     },
     {
         display: "Household Economic Status",
         id: "houseHoldType",
         selected: true,
+        row: "Household Economic Status"
     },
     {
         display: "Household status",
         id: "householdStatus",
         selected: true,
+        row: "Household status"
     },
-    { display: "Member status", id: "memberStatus", selected: true },
+    { display: "Member status", id: "memberStatus", selected: true, row: "Member status" },
+    { display: "Not Active Reason", id: "notActiveReason", selected: true, row: "Not Active Reason" },
     {
         display: "Currently Enrolled in School (Y/N)",
         id: "enrolledInSchool",
         selected: true,
+        row: "Currently Enrolled in School (Y/N/NA)"
     },
-    { display: "Newly enrolled", id: "newlyEnrolled", selected: true },
-    { display: "HIV_Status(+,-,?, -/+)", id: "hivStatus", selected: true },
+    { display: "Newly enrolled", id: "newlyEnrolled", selected: true, row: "Newly enrolled" },
+    { display: "HIV_Status(+,-,?, -/+)", id: "hivStatus", selected: true, row: "HIV_Status(+,-,DK, -/+)" },
     {
         display: "OVC_TST ASSESS",
         id: "riskAssessment",
         selected: true,
+        row: "OVC_TST ASSESS"
     },
     {
         display: "OVC_TST RISK",
         id: "isAtRisk",
         selected: true,
+        row: "OVC_TST RISK"
     },
     {
         display: "OVC_TST REFER",
         id: "OVC_TST_REFER",
         selected: true,
+        row: "OVC_TST REFER"
     },
     {
         display: "OVC_TST REPORT",
         id: "OVC_TST_REPORT",
         selected: true,
+        row: "OVC_TST REPORT"
     },
-    {
-        display: "HIV test not required based on  HIV risk Assessment",
-        id: "isNotAtRisk",
-        selected: true,
-    },
+    // {
+    //     display: "HIV test not required based on  HIV risk Assessment",
+    //     id: "isNotAtRisk",
+    //     selected: true,
+    //     row: ""
+    // },
     {
         display: "Unknown HIV status: other reasons",
         id: "unknown",
         selected: true,
+        row: "Unknown HIV status: other reasons"
     },
-    {
-        display: "Linked to HTS (referred for Testing) (1 Yes, 0 No)",
-        id: "linked",
-        selected: true,
-    },
-    {
-        display: "Tested for HIV (1 Yes, 0 No)",
-        id: "testedForHIV",
-        selected: true,
-    },
+    // {
+    //     display: "Linked to HTS (referred for Testing) (1 Yes, 0 No)",
+    //     id: "linked",
+    //     selected: true,
+    //     row: ""
+    // },
+    // {
+    //     display: "Tested for HIV (1 Yes, 0 No)",
+    //     id: "testedForHIV",
+    //     selected: true,
+    //     row: ""
+    // },
     {
         display: "Newly Reported HIV Positive (1 Yes, 0 No)",
         id: "newlyPositive",
         selected: true,
+        row: "Newly Reported HIV Positive (1 Yes, 0 No)"
     },
 
     {
         display: "Newly Tested HIV Positive (1 Yes, 0 No)",
         id: "newlyTestedPositive",
         selected: true,
+        row: "Newly Tested HIV Positive (1 Yes, 0 No)"
     },
     {
         display: "Newly Tested HIV Positive initiated on ART (1 Yes, 0 No)",
         id: "newlyTestedAndOnArt",
         selected: true,
+        row: "Newly Tested HIV Positive initiated on ART (1 Yes, 0 No)"
     },
-    { display: "Date of ART initiation", id: "artStartDate", selected: true },
-    { display: "ART_No_HVAT", id: "n7VQaJ8biOJ", selected: true },
-    { display: "ART_No_VL", id: "artNo", selected: true },
-    {
-        display: "On_ART_HVAT (1 Yes, 0 No)",
-        id: "umqeJCVp4Zq",
-        selected: true,
-    },
+    { display: "Date of ART initiation", id: "artStartDate", selected: true, row: "Date of ART initiation" },
+    { display: "ART_No_HVAT", id: "n7VQaJ8biOJ", selected: true, row: "ART_No_VL" },
     {
         display: "Facility",
         id: "facility",
         selected: true,
+        row: "Facility"
     },
     {
         display: "Last Viral Load Date",
         id: "lastViralLoadDate",
         selected: true,
+        row: "Last Viral Load Date"
     },
     {
         display: "Regimen",
         id: "currentRegimen",
         selected: true,
+        row: "Regimen"
     },
     {
         display: "On_ART_VL (1 Yes, 0 No)",
         id: "onArt",
         selected: true,
+        row: "On_ART_VL (1 Yes, 0 No)"
     },
+    // { display: "ART_No_VL", id: "artNo", selected: true, row: "" },
+    // {
+    //     display: "On_ART_HVAT (1 Yes, 0 No)",
+    //     id: "umqeJCVp4Zq",
+    //     selected: true,
+    //     row: ""
+    // },
     {
         display: "OVC_VL Eligible (1 Yes, 0 No)",
         id: "ovcEligible",
         selected: true,
+        row: "OVC_VL Eligible (1 Yes, 0 No)"
     },
-    { display: "VLTest done (1 Yes, 0 No)", id: "VLTestDone", selected: true },
-    { display: "OVC_VLR (1 Yes, 0 No, Waiting )", id: "ovcVL", selected: true },
+    { display: "VLTest done (1 Yes, 0 No)", id: "VLTestDone", selected: true, row: "VLTest done (1 Yes, 0 No)" },
+    { display: "OVC_VLR (1 Yes, 0 No, Waiting )", id: "ovcVL", selected: true, row: "OVC_VLR (1 Yes, 0 No, Waiting )" },
     {
         display: "Viral Load Status (Suppressed, Non Suppressed, Waiting)",
         id: "VLStatus",
         selected: true,
+        row: "Viral Load Status (Suppressed, Non Suppressed, Waiting)"
     },
     {
         display: "Viral Load Copies",
         id: "copies",
         selected: true,
+        row: "Viral Load Copies"
     },
-    { display: "OVC_VLS (1 Yes, 0 No))", id: "VLSuppressed", selected: true },
-    { id: "eidNo", display: "EID No", selected: true },
-    { id: "eidEnrollmentDate", display: "EID Enrollment date", selected: true },
-    { id: "motherArtNo", display: "Mother's Art No", selected: true },
-    { id: "dateFirstPCRDone", display: "1st PCR Date", selected: true },
-    { id: "firstPCRResults", display: "1st PCR Results", selected: true },
-    { id: "dateSecondPCRDone", display: "2nd PCR Date", selected: true },
-    { id: "secondPCRResults", display: "2nd PCR Results", selected: true },
-    { id: "dateThirdPCRDone", display: "3rd PCR Date", selected: true },
-    { id: "thirdPCRResults", display: "3rd PCR Results", selected: true },
+    { display: "OVC_VLS (1 Yes, 0 No))", id: "VLSuppressed", selected: true, row: "OVC_VLS (1 Yes, 0 No))" },
+    { id: "eidNo", display: "EID No", selected: true, row: "EID No" },
+    { id: "eidEnrollmentDate", display: "EID Enrollment date", selected: true, row: "EID Enrollment date" },
+    { id: "motherArtNo", display: "Mother's Art No", selected: true, row: "Mother's Art No" },
+    { id: "dateFirstPCRDone", display: "1st PCR Date", selected: true, row: "1st PCR Date" },
+    { id: "firstPCRResults", display: "1st PCR Results", selected: true, row: "1st PCR Results" },
+    { id: "dateSecondPCRDone", display: "2nd PCR Date", selected: true, row: "2nd PCR Date" },
+    { id: "secondPCRResults", display: "2nd PCR Results", selected: true, row: "2nd PCR Results" },
+    { id: "dateThirdPCRDone", display: "3rd PCR Date", selected: true, row: "3rd PCR Date" },
+    { id: "thirdPCRResults", display: "3rd PCR Results", selected: true, row: "3rd PCR Results" },
     {
         id: "hivTestDueDate",
         display: "Due date for HIV rapid Test",
         selected: true,
+        row: "Due date for HIV rapid Test"
     },
     {
         id: "dateHivTestDone",
         display: "Date when HIV rapid test was done",
         selected: true,
+        row: "Date when HIV rapid test was done"
     },
-    { id: "hivTestResults", display: "HIV test result", selected: true },
-    { id: "finalOutcome", display: "Final Outcome", selected: true },
-    { id: "pcr", display: "PCR Test", selected: true },
+    { id: "hivTestResults", display: "HIV test result", selected: true, row: "HIV test result" },
+    { id: "finalOutcome", display: "Final Outcome", selected: true, row: "Final Outcome" },
+    // { id: "pcr", display: "PCR Test", selected: true, row: "" },
     {
         id: "missedAppointmentDate",
         display: "Missed Appointment Date",
         selected: true,
+        row: "Missed Appointment Date"
     },
-    {
-        id: "missedAnAppointment",
-        display: "Missed Appointment",
-        selected: true,
-    },
+    // {
+    //     id: "missedAnAppointment",
+    //     display: "Missed Appointment",
+    //     selected: true,
+    // },
     {
         id: "missedAnAppointmentReason",
         display: "Missed Appointment Reason",
         selected: true,
+        row: "Missed Appointment Reason"
     },
     {
         id: "missedAnAppointmentFollowupOutcome",
         display: "Missed Appointment Followup Outcome",
         selected: true,
+        row: "Missed Appointment Followup Outcome"
     },
     {
         id: "hasEverMissedAnAppointment",
         display: "Ever Missed An Appointment",
         selected: true,
+        row: "Ever Missed An Appointment"
     },
-    { display: "VSLA", id: "VSLA", selected: true },
+    { display: "VSLA", id: "VSLA", selected: true, row: "vsla" },
 
     {
         display: "Group Based Financial Literacy",
         id: "fLiteracy",
         selected: true,
+        row: "Group Based Financial Literacy"
     },
     {
         display: "Home Based Financial Literacy",
         id: "fHomeBasedLiteracy",
         selected: true,
+        row: "Home Based Financial Literacy"
     },
-    { display: "Bank Linkages", id: "bankLinkages", selected: true },
-    { display: "Agribusiness", id: "agriBusiness", selected: true },
-    { display: "SPM Training", id: "spmTraining", selected: true },
-    { display: "Micro-Franchise", id: "micro", selected: true },
-    { display: "IGA Booster", id: "igaBooster", selected: true },
+    { display: "Bank Linkages", id: "bankLinkages", selected: true, row: "Bank Linkages" },
+    { display: "Agribusiness", id: "agriBusiness", selected: true, row: "Agribusiness" },
+    { display: "SPM Training", id: "spmTraining", selected: true, row: "SPM Training" },
+    { display: "Micro-Franchise", id: "micro", selected: true, row: "Micro-Franchise" },
+    { display: "IGA Booster", id: "igaBooster", selected: true, row: "IGA Booster" },
     {
         display: "Temporary Food support",
         id: "tempConsumption",
         selected: true,
+        row: "Temporary Food support"
     },
-    { display: "VSLA OVC protection Fund", id: "vlsaOvcFund", selected: true },
-    { display: "Core_ES", id: "coreES", selected: true },
-    { display: "Education subsidy", id: "educationSubsidy", selected: true },
-    { display: "Home Learning", id: "homeLearning", selected: true },
+    { display: "VSLA OVC protection Fund", id: "vlsaOvcFund", selected: true, row: "VSLA OVC protection Fund" },
+    { display: "Core_ES", id: "coreES", selected: true, row: "Core_ES" },
+    { display: "Education subsidy", id: "educationSubsidy", selected: true, row: "Education subsidy" },
+    { display: "Home Learning", id: "homeLearning", selected: true, row: "Home Learning" },
     {
         display: "Vocational/Apprenticeship",
         id: "nonFormalEducation",
         selected: true,
+        row: "Vocational/Apprenticeship"
     },
     {
         display:
             "Education Information(Enrollment,Attendance,Retention and Progression)",
         id: "educationInformation",
         selected: true,
+        row: "Education Information(Enrollment,Attendance,Retention,Progress)"
     },
     {
         display: "OVC VSLA Education Fund",
         id: "educationFund",
         selected: true,
+        row: "OVC VSLA Education Fund"
     },
-    { display: "core_education", id: "coreEducation", selected: true },
-    { display: "VSLA OVC Health Fund", id: "healthFund", selected: true },
-    { display: "HTS referral", id: "HTSReferral", selected: true },
+
+
+    { display: "core_education", id: "coreEducation", selected: true, row: "core_education" },
+    { display: "VSLA OVC Health Fund", id: "healthFund", selected: true, row: "VSLA OVC Health Fund" },
+    { display: "HTS referral", id: "HTSReferral", selected: true, row: "HTS referral" },
     {
         display: "Non Disclosure Support",
         id: "nonDisclosureSupport",
         selected: true,
+        row: "Non Disclosure Support"
     },
     {
         display: "Antiretroviral Therapy (ART) Initiation",
         id: "artInitiation",
         selected: true,
+        row: "Antiretroviral Therapy (ART) Initiation"
     },
     {
         display: "Home drug delivery",
         id: "homeDrugDelivery",
         selected: true,
+        row: "Home drug delivery"
     },
     {
         display: "ART_Adherence_Education",
         id: "artAdherenceEducation",
         selected: true,
+        row: "ART_Adherence_Education"
     },
     {
         display: "Viraload Bleeding",
         id: "viralLoadBleeding",
         selected: true,
+        row: "Viraload Bleeding"
     },
     {
         display: "PLHIV Returned to Care",
         id: "returnedToCare",
         selected: true,
+        row: "PLHIV Returned to Care"
     },
     {
         display: "Intensive Adherence Counseling (IAC)",
         id: "iac",
         selected: true,
+        row: "Intensive Adherence Counseling (IAC)"
     },
-    { display: "EMTCT", id: "eMTCT", selected: true },
+    { display: "EMTCT", id: "eMTCT", selected: true, row: "emtct" },
     {
         display: "HIV prevention Education",
         id: "hivPrevention",
         selected: true,
+        row: "HIV prevention Education"
     },
-    { display: "Journeys MOH", id: "journeysMOH", selected: true },
-    { display: "Journeys LARA", id: "journeysLARA", selected: true },
-    { display: "NMN (Boys)", id: "NMNBoys", selected: true },
-    { display: "NMN (Girls)", id: "NMNGirls", selected: true },
-    { display: "Transport_Health", id: "TFHealth", selected: true },
-    { display: "PEP Service", id: "PEP", selected: true },
-    { display: "COVID 19 Education", id: "covid19Education", selected: true },
-    { display: "Immunization", id: "immunization", selected: true },
-    { display: "WASH Services", id: "wash", selected: true },
-    { display: "Insecticide Treated Nets", id: "treatedNets", selected: true },
-    { display: "Family Planning", id: "familyPlanning", selected: true },
-    { display: "TB Screening", id: "tbScreening", selected: true },
-    { display: "Risk of TB", id: "atRiskOfTB", selected: true },
-    { display: "Tested for TB", id: "tested4TB", selected: true },
+    // { display: "Journeys MOH", id: "journeysMOH", selected: true, row: "" },
+    // { display: "Journeys LARA", id: "journeysLARA", selected: true, row: "" },
+    // { display: "NMN (Boys)", id: "NMNBoys", selected: true, row: "" },
+    // { display: "NMN (Girls)", id: "NMNGirls", selected: true, row: "" },
+    // { display: "Transport_Health", id: "TFHealth", selected: true, row: "" },
+    // { display: "PEP Service", id: "PEP", selected: true, row: "" },
+    { display: "COVID 19 Education", id: "covid19Education", selected: true, row: "COVID 19 Education" },
+    { display: "Immunization", id: "immunization", selected: true, row: "Immunization" },
+    { display: "WASH Services", id: "wash", selected: true, row: "WASH Services" },
+    { display: "Insecticide Treated Nets", id: "treatedNets", selected: true, row: "Insecticide Treated Nets" },
+    { display: "Family Planning", id: "familyPlanning", selected: true, row: "Family Planning" },
+    { display: "TB Screening", id: "tbScreening", selected: true, row: "TB Screening" },
+    { display: "Risk of TB", id: "atRiskOfTB", selected: true, row: "Risk of TB" },
+    { display: "Tested for TB", id: "tested4TB", selected: true, row: "Tested for TB" },
     {
         display: "Initiated on TB Treatment",
         id: "initiatedOnTB",
         selected: true,
+        row: "Initiated on TB Treatment"
     },
     {
         display: "Supported to Complete TB Dose",
         id: "supported2CompleteTBDose",
         selected: true,
+        row: "Supported to Complete TB Dose"
     },
-    {
-        display: "Other Health Related Services",
-        id: "otherHealthServices",
-        selected: true,
-    },
-    { display: "core_health", id: "coreHealth", selected: true },
+    // {
+    //     display: "Other Health Related Services",
+    //     id: "otherHealthServices",
+    //     selected: true,
+    //     row: ""
+    // },
+    // { display: "core_health", id: "coreHealth", selected: true, row: "" },
     {
         display: "GBV Prevention Education",
         id: "GBVPreventionEducation",
         selected: true,
+        row: "GBV Prevention Education"
     },
-    { display: "Transport_GBV", id: "TFGBV", selected: true },
-    { display: "Legal support", id: "referral4LegalSupport", selected: true },
-    { display: "ECD", id: "ECD", selected: true },
-    { display: "Attended Parenting", id: "parentingAttended", selected: true },
-    { display: "Completed Parenting", id: "parenting", selected: true },
-    {
-        display: "Child Protection Education",
-        id: "childProtectionEducation",
-        selected: true,
-    },
-    {
-        display: "Core_child_protection",
-        id: "coreChildProtection",
-        selected: true,
-    },
-    {
-        display: "Nutrition education",
-        id: "nutritionEducation",
-        selected: true,
-    },
+    { display: "Transport_GBV", id: "TFGBV", selected: true, row: "Transport_GBV" },
+    { display: "Legal support", id: "referral4LegalSupport", selected: true, row: "Legal support" },
+    { display: "ECD", id: "ECD", selected: true, row: "ECD" },
+    { display: "Attended Parenting", id: "parentingAttended", selected: true, row: "Attended Parenting" },
+    { display: "Completed Parenting", id: "parenting", selected: true, row: "Completed Parenting" },
+    // {
+    //     display: "Child Protection Education",
+    //     id: "childProtectionEducation",
+    //     selected: true,
+    //     row: ""
+    // },
+    // {
+    //     display: "Core_child_protection",
+    //     id: "coreChildProtection",
+    //     selected: true,
+    //     row: ""
+    // },
+    // {
+    //     display: "Nutrition education",
+    //     id: "nutritionEducation",
+    //     selected: true,
+    //     row: ""
+    // },
     {
         display: "Voucher for crops",
         id: "voucher4CropsOrKitchenGardens",
         selected: true,
+        row: "Voucher for Crops"
     },
     {
         display: "NutritionalSupport (Kitchen Garden)",
         id: "kitchenGarden",
         selected: true,
+        row: "NutritionalSupport (Kitchen Garden)"
     },
     {
         display: "Nutritional Assessment",
         id: "nutritionalAssessment",
         selected: true,
+        row: "Nutritional Assessment"
     },
     {
         display: "Nutritional Food Supplement",
         id: "nutritionalFoodSupplement",
         selected: true,
+        row: "Nutritional Food Supplement"
     },
-    { display: "core_nutrition", id: "coreNutrition", selected: true },
-    { display: "PSS", id: "psychosocialSupport", selected: true },
-    { display: "core_pss", id: "corePSS", selected: true },
-    {
-        display: "Served in Current Reporting Quarter",
-        id: "quarter",
-        selected: true,
-    },
-    {
-        display: "Served_in_Previous Quarter",
-        id: "servedInPreviousQuarter",
-        selected: true,
-    },
+    // { display: "core_nutrition", id: "coreNutrition", selected: true, row: "" },
+    { display: "PSS", id: "psychosocialSupport", selected: true, row: "pss" },
+    { display: "core_pss", id: "corePSS", selected: true, row: "core_pss" },
+    // {
+    //     display: "Served in Current Reporting Quarter",
+    //     id: "quarter",
+    //     selected: true,
+    //     row: ""
+    // },
+    // {
+    //     display: "Served_in_Previous Quarter",
+    //     id: "servedInPreviousQuarter",
+    //     selected: true,
+    // },
     {
         display: "Pre-Graduated(1 Yes, 0 No)",
         id: "preGraduated",
         selected: true,
+        row: "Pre-Graduated(1 Yes, 0 No)"
     },
     {
         display: "Fully Graduated(1 Yes, 0 No)",
         id: "fullyGraduated",
         selected: true,
+        row: "Fully Graduated (1 Yes, 0 No)"
     },
-    { display: "OVC_SERV(1 Yes, 0 No)", id: "OVC_SERV", selected: true },
-    { display: "OVC_ENROL", id: "OVC_ENROL", selected: true },
-    { display: "OVC_SERV_SUBPOP", id: "OVC_SERV_SUBPOP", selected: true },
-    {
-        display: "OVC_HIV STAT (1 Yes, 0 No, )",
-        id: "OVC_HIV_STAT",
-        selected: true,
-    },
-    {
-        display: "Asset Ownership",
-        id: "assetOwnership",
-        selected: true,
-    },
-    {
-        display: "Exited With Graduation",
-        id: "exitedWithGraduation",
-        selected: true,
-    },
+    { display: "OVC_SERV(1 Yes, 0 No)", id: "OVC_SERV", selected: true, row: "OVC_SERV" },
+    // { display: "OVC_ENROL", id: "OVC_ENROL", selected: true, row: "" },
+    // { display: "OVC_SERV_SUBPOP", id: "OVC_SERV_SUBPOP", selected: true, row: "" },
+    // {
+    //     display: "OVC_HIV STAT (1 Yes, 0 No, )",
+    //     id: "OVC_HIV_STAT",
+    //     selected: true,
+    // },
+    // {
+    //     display: "Asset Ownership",
+    //     id: "assetOwnership",
+    //     selected: true,
+    // },
+    // {
+    //     display: "Exited With Graduation",
+    //     id: "exitedWithGraduation",
+    //     selected: true,
+    // },
     {
         display: "Transferred to Other PEPFAR IP",
         id: "otherPERFARIP",
         selected: true,
+        row: "Transferred to Other PEPFAR IP"
     },
-    { display: "Transferred to Other IP", id: "otherIP", selected: true },
-    { display: "Para-social Worker", id: "homeVisitor", selected: true },
+    { display: "Transferred to Other IP", id: "otherIP", selected: true, row: "Transferred to Other IP" },
+    { display: "Para-social Worker", id: "homeVisitor", selected: true, row: "Para-social Worker" },
     {
         display: "Telephone No. of Para-social Worker",
         id: "homeVisitorContact",
         selected: true,
+        row: "Telephone No. of Para-social Worker"
     },
     {
         display: "Data Entrant",
         id: "dataEntrant",
         selected: true,
+        row: "Data Entrant"
     },
     {
         display: "Q",
