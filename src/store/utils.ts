@@ -31,6 +31,30 @@ export const calculateQuarter = (
   return [new Date(`${year}-10-01`), new Date(`${year}-12-31`)];
 };
 
+export const calculateStandardQuarter = (
+  year: number,
+  quarter: number
+): [Date, Date] => {
+  if (quarter === 1) {
+    // Q1: January 1 to March 31 of the current year
+    return [new Date(`${year}-01-01`), new Date(`${year}-03-31`)];
+  }
+  if (quarter === 2) {
+    // Q2: April 1 to June 30 of the current year
+    return [new Date(`${year}-04-01`), new Date(`${year}-06-30`)];
+  }
+  if (quarter === 3) {
+    // Q3: July 1 to September 30 of the current year
+    return [new Date(`${year}-07-01`), new Date(`${year}-09-30`)];
+  }
+  if (quarter === 4) {
+    // Q4: October 1 to December 31 of the current year
+    return [new Date(`${year}-10-01`), new Date(`${year}-12-31`)];
+  }
+  // Default case if quarter is invalid
+  return [new Date(`${year}-01-01`), new Date(`${year}-12-31`)];
+};
+
 
 
 
@@ -58,7 +82,8 @@ export const getQuarterDates = (date: Dayjs) => {
   const year = date.year();
   const quarter = getQuarterFromDate(date);
 
-  const [startDate, endDate] = calculateQuarter(year, quarter);
+  const [startDate, endDate] = calculateStandardQuarter(year, quarter);
+  // const [startDate, endDate] = calculateQuarter(year, quarter);
 
   return {
     start: dayjs(startDate).format('YYYY-MM-DD'),

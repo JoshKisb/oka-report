@@ -50,7 +50,7 @@ import ReportDownloadButton from "../ReportDownloadButton";
 const createQuery = (parent: any) => {
 	return {
 		organisations: {
-			resource: `organisationUnits.json`,
+			resource: `organisationUnits/aXmBzv61LbM.json?includeDescendants=true`,
 			params: {
 				// filter: `:in:[${parent.id}]`,
 				// filter: `level:in:[5,4]`,
@@ -165,7 +165,8 @@ const DataSetLayerFilter = () => {
 			// const all = flattenDeep(found.map((org: any) => [org, ...org.children]));
 			// const allorgs = [...all];
 			setUserOrgUnits(organisationUnits);
-			console.log({ orgs: found });
+			setSelectedOrgUnits([found?.[0].id])
+			console.log({ orgs: found, selected: [organisationUnits?.[0].id] });
 			setFetchedOrgs(found);
 		} catch (e) {
 			console.log(e);
@@ -318,8 +319,8 @@ const DataSetLayerFilter = () => {
 		console.log("org", store.selectedOrgUnits, org, dates, code);
 		
 		const orgUnits = getOrgUnitsAtTargetLevel(org, org.level);
-    console.log("Organization Units at Target Level:", orgUnits);
-	const orgNames = orgUnits.map((unit: any) => `'${unit.name}'`).join(', ')
+		console.log("Organization Units at Target Level:", orgUnits);
+		const orgNames = orgUnits.map((unit: any) => `'${unit.name}'`).join(', ')
 		loadTable(dates.start, dates.end, orgNames, org.level, code);
 	}
 
@@ -469,14 +470,12 @@ const DataSetLayerFilter = () => {
 					<Text>Code:</Text>
 					<Input
 						value={code}
-						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+						onChange={(e: ChangeEvent<HTMLInputElement>) => {
 							setCode(e.target.value)
-						}
+							changeCode(e.target.value)
+						}}
 					/>
 				</Stack>
-
-				<Button onClick={() => changeCode(code)}>Search</Button>
-				<Spacer />
 				<Button
 					onClick={() => {
 						handleLoadTable();

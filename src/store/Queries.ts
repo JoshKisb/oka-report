@@ -725,7 +725,7 @@ export function useLoader() {
             "parent"
         );
         setUserOrgUnits(processedUnits);
-        setSelectedOrgUnits([dataViewOrganisationUnits[0].id]);
+        // setSelectedOrgUnits([dataViewOrganisationUnits[0].id]);
         setSessions({
             "MOE Journeys Plus": options.map((o: any) => o.code),
             "MOH Journeys curriculum": options1.map((o: any) => o.code),
@@ -3152,7 +3152,7 @@ export const useSqlView = () => {
     const engine = useDataEngine();
     
     const updateQuery = async (start = '', end = '', parish = '', level = 'parish', beneficiary = '') => {
-        let queryparams = `"'2024-01-01' AND '2024-12-31'`
+        let queryparams = `"'${start}' AND '${end}'`
         let queryparams2 = `"${level}" IN (${parish})`;
         
         if (!!beneficiary) {

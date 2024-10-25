@@ -70,7 +70,7 @@ const ReportDownloadButton: React.FC<ReportDownloadButtonProps> = ({ code }) => 
     setError(null);
     try {
 
-      const response = await serverapi.get(`/download-report${buildOrgQueryString([org?.label], code, period)}`, { responseType: 'blob' });
+      const response = await serverapi.get(`/download-report${buildOrgQueryString([org?.name], code, period)}`, { responseType: 'blob' });
       // const response = await serverapi.get(`/download-report?level={}&org={}`, { responseType: 'blob' });
 
       // Create a URL for the downloaded file
