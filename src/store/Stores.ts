@@ -14,6 +14,7 @@ import {
     changeRelationshipTypes,
     changeTotal,
     setColumn4,
+    setColumn,
     setCurrentProgram,
     setCurrentStage,
     setDistricts,
@@ -84,6 +85,9 @@ export const $store = domain
     })
     .on(changePeriod, (state, period) => {
         return { ...state, period };
+    })
+    .on(setColumn, (state, columns) => {
+        return { ...state, columns };
     })
     .on(addRemoveColumn, (state, { id, value }) => {
         const processed = state.columns.map((column) => {

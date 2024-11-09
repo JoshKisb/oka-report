@@ -119,7 +119,7 @@ const DataSetLayerFilter = () => {
 	const filteredColumns = useStore($columns);
 	const isChecked = useStore($isChecked);
 	const [org, setOrg] = useState<any[] | null>(null);
-	const { updateQuery, fetchView } = useSqlView();
+	const { updateQuery, fetchView, getAvailableColumns } = useSqlView();
 	const targetLevel = 3;
 
 	
@@ -166,7 +166,7 @@ const DataSetLayerFilter = () => {
 			// const allorgs = [...all];
 			setUserOrgUnits(organisationUnits);
 			setSelectedOrgUnits([found?.[0].id])
-			console.log({ orgs: found, selected: [organisationUnits?.[0].id] });
+			// console.log({ orgs: found, selected: [organisationUnits?.[0].id] });
 			setFetchedOrgs(found);
 		} catch (e) {
 			console.log(e);
@@ -174,6 +174,8 @@ const DataSetLayerFilter = () => {
 	};
 
 	useEffect(() => {
+		// const dates = getQuarterDates(store.period || dayjs())
+		getAvailableColumns(store.period);
 		loadOrganisationUnitsChildren({});
 	}, []);
 

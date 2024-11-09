@@ -39,12 +39,12 @@ export const columns: Column[] = [
         selected: true,
         row: "Enrollment Date"
     },
-    {
-        display: "Event Date",
-        id: "event_date",
-        selected: true,
-        row: "event_date"
-    },
+    // {
+    //     display: "Event Date",
+    //     id: "event_date",
+    //     selected: true,
+    //     row: "event_date"
+    // },
     { display: "District", id: "district", selected: true, row: "district" },
     { display: "Sub-county", id: "subCounty", selected: true, row: "subcounty/division" },
     { display: "Parish", id: "orgUnitName", selected: true, row: "parish" },
