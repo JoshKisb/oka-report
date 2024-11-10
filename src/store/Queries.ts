@@ -43,6 +43,7 @@ import {
 	setSelectedOrgUnits,
 	setSessions,
 	setSubCounties,
+	setTotalRecords,
 	setUserOrgUnits,
 } from "./Events";
 import {
@@ -3061,7 +3062,9 @@ export const useSqlView = () => {
 		parish = "",
 		level = "parish",
 		beneficiary = "",
-		columns: Column[] = []
+		columns: Column[] = [],
+		page = 1,
+		limit: number|null = 10
 	) => {
 		let queryparams = (!!start && !!end) ? `"'${start}' AND '${end}'` : ``;
 		let queryparams2 = (!!level && !!parish) ? `"${level}" IN (${parish})` : ``;
@@ -3077,18 +3080,19 @@ export const useSqlView = () => {
 					.filter((c) => !!c.row)
 					.map((c) => `"${c.row}"`)
 					.join(", \n");
-		console.log("cols", { cols, columns });
+		// console.log("cols", { cols, columns });
 
 		const whereClause = !!queryparams2 ? `, 
 		'${queryparams2.replace(/'/g, "''")}'
 ` : '';
 
+		const offset = !!limit ? ((page - 1) * limit) : 0;
 
 		const query = `SELECT 
 			${cols} 
 			FROM get_indicators(
-				0, 
-				1000, 
+				${offset}, 
+				${limit}, 
 				'${queryparams.replace(/'/g, "''")}' ${whereClause}
 			) ;`;
 		const params = {
@@ -3151,7 +3155,7 @@ export const useSqlView = () => {
 		console.log("Query updated");
 		const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.json`);
 		const data = await response.json();
-		console.log("resss", data);
+		// console.log("resss", data);
 		const headers = data.listGrid.headers;
 		const columns: Column[] = headers.map((h: any) => ({
 			display: h.name,
@@ -3163,7 +3167,23 @@ export const useSqlView = () => {
 		return columns;
 	}
 
-	return { updateQuery, fetchView, getAvailableColumns };
+	const getTotalRecords = async (
+		start = "",
+		end = "",
+		parish = "",
+		level = "parish",
+		beneficiary = "",
+	) => {
+		await updateQuery(start, end, parish, level, beneficiary, [], 1, null);
+		console.log("Query updated");
+		const response = await fetch(`/ovc/api/sqlViews/DQyX081ap5z/data.json`);
+		const data = await response.json();
+		console.log("ress", data);
+		const total = data.pager.total;
+		setTotalRecords(total);
+	 }
+
+	return { updateQuery, fetchView, getAvailableColumns, getTotalRecords };
 };
 
 export const useLayering = (query: { [key: string]: any }) => {

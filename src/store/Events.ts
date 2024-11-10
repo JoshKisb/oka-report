@@ -3,6 +3,7 @@ import { Column, ColumnProps, DistrictOption } from "./../interfaces";
 import { domain } from "./Domains";
 
 export const changeTotal = domain.createEvent<number>();
+export const setTotalRecords = domain.createEvent<number>();
 export const setSelectedOrgUnits = domain.createEvent<string[]>();
 export const setUserOrgUnits = domain.createEvent<any[]>();
 export const changeRelationshipTypes = domain.createEvent<any[]>();

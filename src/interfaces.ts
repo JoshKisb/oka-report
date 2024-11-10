@@ -17,6 +17,7 @@ export interface Store {
     selectedProgram: string;
     program: any;
     total: number;
+    totalRecords: number;
     period: Dayjs | null | undefined;
     columns: Column[];
     columns2: Column[];

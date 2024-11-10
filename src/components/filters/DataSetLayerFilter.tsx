@@ -119,7 +119,7 @@ const DataSetLayerFilter = () => {
 	const filteredColumns = useStore($columns);
 	const isChecked = useStore($isChecked);
 	const [org, setOrg] = useState<any[] | null>(null);
-	const { updateQuery, fetchView, getAvailableColumns } = useSqlView();
+	const { updateQuery, fetchView, getAvailableColumns, getTotalRecords } = useSqlView();
 	const targetLevel = 3;
 
 	
@@ -299,11 +299,10 @@ const DataSetLayerFilter = () => {
 		modalOnClose();
 	};
 
-	const loadTable = async (start_date: string, end_date: string, organisation = 'Bukesa', orglevel = 5, beneficiary = '') => {
+	const loadTable = async (start_date: string, end_date: string, organisation = 'Bukesa', level = "", beneficiary = '') => {
 		// setIsLoading(true)
 		
 		setTableLoading(true)
-		const level = orglevel == 5 ? "parish" : orglevel == 4 ? "subcounty/division" : "district";
 		await updateQuery(start_date, end_date, organisation, level, beneficiary, filteredColumns);
 		const table = await fetchView(start_date, end_date, organisation, level);
 		setTableLoading(false);
@@ -313,17 +312,23 @@ const DataSetLayerFilter = () => {
 
 	};
 
-	const handleLoadTable = () => {
+	const loadPagination = async (start_date: string, end_date: string, organisation = 'Bukesa', level = "", beneficiary = '') => {
+		await getTotalRecords(start_date, end_date, organisation, level, beneficiary);
+	}
+
+	const handleLoadTable = async () => {
 		const dates = getQuarterDates(store.period || dayjs())
 
 		const selectedOrg = store.selectedOrgUnits?.[0];
 		const org = store.userOrgUnits.find(org => org.id == selectedOrg);
-		console.log("org", store.selectedOrgUnits, org, dates, code);
+		// console.log("org", store.selectedOrgUnits, org, dates, code);
 		
 		const orgUnits = getOrgUnitsAtTargetLevel(org, org.level);
-		console.log("Organization Units at Target Level:", orgUnits);
+		// console.log("Organization Units at Target Level:", orgUnits);
 		const orgNames = orgUnits.map((unit: any) => `'${unit.name}'`).join(', ')
-		loadTable(dates.start, dates.end, orgNames, org.level, code);
+		const level = org.level == 5 ? "parish" : org.level == 4 ? "subcounty/division" : "district";
+		await loadTable(dates.start, dates.end, orgNames, level, code);
+		loadPagination(dates.start, dates.end, orgNames, level, code);
 	}
 
 	// useEffect(() => {

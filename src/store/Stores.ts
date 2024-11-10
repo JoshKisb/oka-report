@@ -13,6 +13,7 @@ import {
     changePeriod,
     changeRelationshipTypes,
     changeTotal,
+    setTotalRecords,
     setColumn4,
     setColumn,
     setCurrentProgram,
@@ -44,6 +45,7 @@ export const $store = domain
         selectedProgram: "RDEklSXCD4C",
         program: {},
         total: 0,
+        totalRecords: 0,
         period: dayjs(),
         columns: columns,
         columns2: columns2,
@@ -82,6 +84,9 @@ export const $store = domain
     })
     .on(changeTotal, (state, total) => {
         return { ...state, total };
+    })
+    .on(setTotalRecords, (state, totalRecords) => {
+        return { ...state, totalRecords };
     })
     .on(changePeriod, (state, period) => {
         return { ...state, period };
