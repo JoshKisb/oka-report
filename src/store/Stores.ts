@@ -33,8 +33,10 @@ import {
     setTableHTML,
     setTableLoading,
 } from "./Events";
-import { calculateQuarter } from "./utils";
+import { calculateQuarter, calculateStandardQuarter, getFiscalQuarter } from "./utils";
 
+const { fiscalYear, quarter } = getFiscalQuarter(new Date());
+// console.log("Quarter", getFiscalQuarter(new Date("2024-12-01")))
 export const $store = domain
     .createStore<Store>({
         loading: false,
@@ -46,7 +48,7 @@ export const $store = domain
         program: {},
         total: 0,
         totalRecords: 0,
-        period: dayjs(),
+        period: dayjs(calculateStandardQuarter(fiscalYear, quarter)[0]),
         columns: columns,
         columns2: columns2,
         columns3: columns3,

@@ -56,6 +56,25 @@ export const calculateStandardQuarter = (
 };
 
 
+export const getFiscalQuarter = (date: Date): { fiscalYear: number; quarter: number } => {
+  const month = date.getMonth() + 1; // 1-based month
+  const year = date.getFullYear();
+
+  if (month >= 10) {
+    // Q1 of next fiscal year (October–December)
+    return { fiscalYear: year + 1, quarter: 1 };
+  } else if (month >= 1 && month <= 3) {
+    // Q2 of the current fiscal year (January–March)
+    return { fiscalYear: year, quarter: 2 };
+  } else if (month >= 4 && month <= 6) {
+    // Q3 of the current fiscal year (April–June)
+    return { fiscalYear: year, quarter: 3 };
+  } else {
+    // Q4 of the current fiscal year (July–September)
+    return { fiscalYear: year, quarter: 4 };
+  }
+};
+
 
 
 export const findQuarters = (year: number, quarter: number) => {

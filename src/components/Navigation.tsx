@@ -12,7 +12,7 @@ export const Navigation = () => {
 
     return (
         <div>
-            <TabBar>
+            <TabBar scrollable={true}>
                 <Tab
                     icon={<IconHome24 />}
                     onClick={() => changeLink("/")}
