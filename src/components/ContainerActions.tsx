@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@chakra-ui/react';
+import { useState, useEffect } from "react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { serverapi, api } from "../store/Queries";
-import { useStore } from 'effector-react';
+import { useStore } from "effector-react";
 import { $store } from "../store/Stores";
-import { setRunning } from '../store/Events';
-
+import { setRunning } from "../store/Events";
 
 const ContainerActions = () => {
 	const store = useStore($store);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isRunning, setIsRunning] = useState<boolean | undefined>();
 	const [isLoadingRunReport, setIsLoadingRunReport] = useState(false);
 	const [isLoadingStopReport, setIsLoadingStopReport] = useState(false);
@@ -20,15 +20,17 @@ const ContainerActions = () => {
 	const checkStatus = async () => {
 		try {
 			const res = await serverapi.post("/check-report");
-			if (res.data.status === 'running') {
+			if (res.data.status === "running") {
 				setIsRunning(true);
 				setRunning(true);
-			} else if (res.data.status === 'stopped') {
+			} else if (res.data.status === "stopped") {
 				setIsRunning(false);
-				setRunning(false)
+				setRunning(false);
 			}
 		} catch (e) {
 			console.log(e);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -67,8 +69,26 @@ const ContainerActions = () => {
 		}
 	};
 
+	const getStatusColor = () => {
+		if (isLoading) return "yellow.400"; // Loading
+		if (isRunning) return "green.400"; // Running
+		return "red.400"; // Stopped
+	};
+
 	return (
 		<>
+			<Flex align="center" gap={2}>
+				<Box
+					width="10px"
+					height="10px"
+					borderRadius="full"
+					bgColor={getStatusColor()}
+					animation={isLoading ? "spin 1s linear infinite" : undefined}
+				/>
+				<Text fontSize="sm">
+					{isLoading ? "Loading..." : isRunning ? "Running" : "Stopped"}
+				</Text>
+			</Flex>
 			{!isRunning ? (
 				<Button
 					colorScheme="blue"

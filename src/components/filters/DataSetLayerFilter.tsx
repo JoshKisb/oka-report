@@ -264,7 +264,7 @@ const DataSetLayerFilter = () => {
 
 	return (
 		<>
-			<Stack direction="row">
+			<Stack direction="row" alignItems="end">
 				<FormControl>
 					<FormLabel>Select Organisation:</FormLabel>
 					<TreeSelect
